@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:notes_app/presentation/elements/custom_textf_field.dart';
@@ -11,7 +12,6 @@ import 'package:notes_app/presentation/view/home/home_view.dart';
 import '../../../../../config/front_end_config.dart';
 import '../../../../../navigation_helper/navigation_helper.dart';
 import '../../../../elements/custom_button.dart';
-import '../../register/layout/register_body.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({Key? key}) : super(key: key);
@@ -42,6 +42,7 @@ class _LoginBodyState extends State<LoginBody> {
                 )),
             Flexible(
                 child: CustomTextField(
+                  textInputType: TextInputType.emailAddress,
                   controller: _emailController,
                   hint: 'Enter Email',
                   iconData: Icons.person,

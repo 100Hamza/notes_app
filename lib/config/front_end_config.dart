@@ -12,5 +12,9 @@ class FrontEndConfig
  static Color kAccountTextColor = const Color(0xFF82A0B7);
  static Color kAuthTextColor = const Color(0xFF1321E0);
  static Color kFavouriteIconColor = const Color(0xFFD9D9D9);
+ static Color kPersonalCardIconBGColor = const Color(0xFFFFEE9B);
+ static const Color kWorkCardIconBGColor = Color(0xFFB5FF9B);
+ static Color kShoppingCardIconBGColor = const Color(0xFFFF9BCD);
+ static Color kGroupCardsNotesCountColor = const Color(0xFFA1A1A1);
 
 }
