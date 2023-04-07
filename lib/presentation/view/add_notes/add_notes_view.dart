@@ -15,10 +15,15 @@ class NotesView extends StatefulWidget {
   @override
   State<NotesView> createState() => _NotesViewState();
 }
+
 TextEditingController _titleController = TextEditingController();
 TextEditingController _descriptionController = TextEditingController();
 bool _isLoading = false;
+
 class _NotesViewState extends State<NotesView> {
+  String group = 'Personal';
+  var groupName = ['Personal', 'Work', 'Meeting', 'Shopping'];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,7 +52,7 @@ class _NotesViewState extends State<NotesView> {
                           color: Colors.white,
                         )),
                     InkWell(
-                      onTap: (){
+                      onTap: () {
                         _addNotes();
                       },
                       child: const Icon(
@@ -60,13 +65,52 @@ class _NotesViewState extends State<NotesView> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomTextField(controller: _titleController,hint: 'Title', isIcons: false,fontWeight: FontWeight.bold, fontSize: 22.0, fontColor: FrontEndConfig.kNoteTitle,isBorder: false),
-                    CustomText(text: DateTime.now().toString() , textColor: FrontEndConfig.kNotesTime,),
-                    CustomTextField(controller: _descriptionController, hint: 'Type Something.....', isIcons: false,fontWeight: FontWeight.bold, fontSize: 16.0, fontColor: FrontEndConfig.kNoteTitle,isBorder: false , maxLines: 10),
+                    Container(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CustomTextField(
+                                controller: _titleController,
+                                hint: 'Title',
+                                isIcons: false,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                fontColor: FrontEndConfig.kNoteTitle,
+                                isBorder: false),
+                          ),
+                          DropdownButton(
+                              value: group,
+                              items: groupName.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  group = newValue!;
+                                });
+                              }),
+                        ],
+                      ),
+                    ),
+                    CustomText(
+                      text: DateTime.now().toString(),
+                      textColor: FrontEndConfig.kNotesTime,
+                    ),
+                    CustomTextField(
+                        controller: _descriptionController,
+                        hint: 'Type Something.....',
+                        isIcons: false,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        fontColor: FrontEndConfig.kNoteTitle,
+                        isBorder: false,
+                        maxLines: 10),
                   ],
                 ))
           ],
@@ -75,9 +119,8 @@ class _NotesViewState extends State<NotesView> {
     );
   }
 
-  void _addNotes() async
-  {
-    try{
+  void _addNotes() async {
+    try {
       _isLoadingTrue();
       var id = FirebaseAuth.instance.currentUser!.uid;
       var docID = FirebaseFirestore.instance.collection('Notes').doc().id;
@@ -87,25 +130,24 @@ class _NotesViewState extends State<NotesView> {
         "date&Time": DateTime.now(),
         "userId": id,
         "docId": docID,
+        "group": group
       }).whenComplete(() {
         _isLoadingFalse();
         NavigationHelper.pushRoute(context, HomeView());
       });
-    }
-    catch(e)
-    {
+    } catch (e) {
       Fluttertoast.showToast(msg: "Error: $e");
       _isLoadingFalse();
     }
   }
-  void _isLoadingTrue()
-  {
-   setState(() {
-     _isLoading = true;
-   });
+
+  void _isLoadingTrue() {
+    setState(() {
+      _isLoading = true;
+    });
   }
-  void _isLoadingFalse()
-  {
+
+  void _isLoadingFalse() {
     setState(() {
       _isLoading = false;
     });

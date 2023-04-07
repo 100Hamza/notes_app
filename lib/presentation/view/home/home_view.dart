@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:notes_app/config/front_end_config.dart';
 import 'package:notes_app/presentation/view/add_notes/add_notes_view.dart';
 import 'package:notes_app/presentation/view/groups/group_view.dart';
-import 'package:notes_app/presentation/view/home/layout/home_body.dart';
+
+
+import '../profile/profile_view.dart';
 
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  String? groupName;
+  HomeView({this.groupName = "Personal"});
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
+
   int _page = 0;
-  List _pager = [
-    HomeBody(), NotesView() , GroupView()
-  ];
+  List _pager = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pager = [
+      GroupView(),NotesView() , ProfileView(),
+    ];
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +45,6 @@ class _HomeViewState extends State<HomeView> {
         onTap: (index){
           setState(() {
             _page = index;
-            Fluttertoast.showToast(msg: "Index: $_page");
           });
         },
       ),

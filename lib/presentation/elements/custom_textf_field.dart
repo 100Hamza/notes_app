@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
   FontWeight? fontWeight;
   Color? fontColor;
   Color hintColor;
-
+  TextInputType? textInputType;
   CustomTextField(
       {this.hint,
       this.iconData,
@@ -22,13 +22,16 @@ class CustomTextField extends StatelessWidget {
       this.fontSize,
       this.isIcons = true,
       this.isBorder = true ,
-      this.hintColor = FrontEndConfig.kNotesTime});
+      this.hintColor = FrontEndConfig.kNotesTime,
+        this.textInputType,
+      });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        keyboardType: textInputType,
         controller: controller,
         style: TextStyle(
           color: fontColor,

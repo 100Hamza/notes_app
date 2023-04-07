@@ -6,8 +6,10 @@ import 'package:notes_app/presentation/elements/custom_text.dart';
 
 import '../../../no_data/list_is_empty.dart';
 
+
 class HomeCard extends StatefulWidget {
-  const HomeCard({super.key});
+  String? groupName = 'Personal';
+  HomeCard({this.groupName});
   @override
   State<HomeCard> createState() => _HomeCardState();
 }
@@ -33,7 +35,7 @@ class _HomeCardState extends State<HomeCard> {
             alignment: Alignment.centerLeft,
               height: 20,
               width: MediaQuery.of(context).size.width,
-              child: CustomText(text: 'Personal', textColor: FrontEndConfig.kCategoryTextColor, fontSize: 13, fontWeight: FontWeight.w600,)),
+              child: CustomText(text: widget.groupName, textColor: FrontEndConfig.kCategoryTextColor, fontSize: 13, fontWeight: FontWeight.w600,)),
         ),
         Container(
           height: MediaQuery.of(context).size.height/1.9,
@@ -90,9 +92,10 @@ class _HomeCardState extends State<HomeCard> {
   }
 
   fetchData() async{
+
     var id = FirebaseAuth.instance.currentUser!.uid;
-    await FirebaseFirestore.instance
-        .collection('Notes').where('uId', isEqualTo: id)
+    FirebaseFirestore.instance
+        .collection('Notes').where('userId', isEqualTo: id,).where('group' , isEqualTo: widget.groupName)
         .snapshots()
         .listen((QuerySnapshot snapshot) {
           allData.clear();
