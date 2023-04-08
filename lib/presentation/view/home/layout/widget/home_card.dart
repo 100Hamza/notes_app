@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:notes_app/config/front_end_config.dart';
 import 'package:notes_app/presentation/elements/custom_text.dart';
+import 'package:notes_app/presentation/elements/navigation_dialog.dart';
+import 'package:notes_app/presentation/view/home/layout/widget/slide_widget.dart';
 
 import '../../../no_data/list_is_empty.dart';
 
@@ -42,45 +46,70 @@ class _HomeCardState extends State<HomeCard> {
           child: ListView.builder(
             itemCount: allData.length,
             itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0 , vertical: 10),
-                child: Material(
-                  elevation: 15,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    height: 70,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(width: 10 , decoration: const BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.horizontal(left: Radius.circular(10))),),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CustomText(text: '09' , textColor: FrontEndConfig.kOnBoardingSecondTextColor),
-                                  CustomText(text: 'June' , textColor: FrontEndConfig.kOnBoardingSecondTextColor,),
-                                ],),
-                              CustomText(text: allData[index]['title'], fontSize: 14,textColor: FrontEndConfig.kButtonColor,fontWeight: FontWeight.w800),
-                            ],
+              final item = allData[index].toString();
+              return Dismissible(
+                // direction: DismissDirection.startToEnd,
+                key: Key(item),
+
+                confirmDismiss: (direction) async {
+                  if(direction == DismissDirection.startToEnd)
+                    {
+                      Fluttertoast.showToast(msg: 'This is Edit Swipe');
+                    }
+                  else
+                    {
+                      await showNavigationDialog(context, title: 'Delete', buttonText: 'Yes', message: 'Do you want to Delete? ', secondButton: 'No', navigation: (){
+                        Fluttertoast.showToast(msg: 'This is Delete Swipe');
+                        Navigator.of(context).pop();
+                      }, isSecondButton: true);
+                    }
+                  return null;
+                },
+                onDismissed: (direction) {
+                },
+                background: SlideWidget(backgroundColor: Colors.green ,labelText: 'Edit' , icon: Icons.edit , mainAxisAlignment: MainAxisAlignment.start, iconPadding: const EdgeInsets.only(left: 20),),
+                secondaryBackground: SlideWidget(backgroundColor: Colors.red ,labelText: 'Delete' , icon: Icons.delete, mainAxisAlignment: MainAxisAlignment.end , iconPadding: const EdgeInsets.only(right: 20)),
+
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0 , vertical: 10),
+                  child: Material(
+                    elevation: 15,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(width: 10 , decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.horizontal(left: Radius.circular(10))),),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomText(text: '09' , textColor: FrontEndConfig.kOnBoardingSecondTextColor),
+                                    CustomText(text: 'June' , textColor: FrontEndConfig.kOnBoardingSecondTextColor,),
+                                  ],),
+                                CustomText(text: allData[index]['title'], fontSize: 14,textColor: FrontEndConfig.kButtonColor,fontWeight: FontWeight.w800),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 50,),
-                        Container(
-                          width: 100 ,alignment: Alignment.centerRight, child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.favorite ,color: FrontEndConfig.kFavouriteIconColor,),
-                        ),
-                        )
-                      ],
+                          SizedBox(width: 50,),
+                          Container(
+                            width: 100 ,alignment: Alignment.centerRight, child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.favorite ,color: FrontEndConfig.kFavouriteIconColor,),
+                          ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
