@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:notes_app/config/front_end_config.dart';
-import 'package:notes_app/presentation/view/auth/login/login_view.dart';
 import 'package:notes_app/presentation/view/home/layout/widget/home_card.dart';
 
 
@@ -68,33 +65,5 @@ class _HomeBodyState extends State<HomeBody> {
       ),
     );
   }
-  // void _signOut() async
-  // {
-  //   _isLoadingTrue();
-  //   try{
-  //     await FirebaseAuth.instance.signOut().whenComplete(() {
-  //       _isLoadingFalse();
-  //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-  //           LoginView()), (Route<dynamic> route) => false);
-  //     });
-  //   }
-  //   catch(e)
-  //   {
-  //     Fluttertoast.showToast(msg: e.toString());
-  //     _isLoadingFalse();
-  //   }
-  // }
 
-  void _isLoadingTrue()
-  {
-    setState(() {
-      _isLoading = true;
-    });
-  }
-  void _isLoadingFalse()
-  {
-    setState(() {
-      _isLoading = false;
-    });
-  }
 }
